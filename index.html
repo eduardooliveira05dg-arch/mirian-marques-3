@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mirian Marques Beauty Studio — Agendamento</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@300;400;500&family=Inter:wght@300;400;500&display=swap');
+
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --white:#FFFFFF;
+  --off:#FAFAFA;
+  --rose-bg:#F9C8D0;
+  --rose-light:#FDEEF0;
+  --rose-mid:#E8A0AA;
+  --rose-dark:#C97A88;
+  --ink:#1A1A1A;
+  --muted:#666;
+  --soft:#999;
+  --border:#EEE;
+  --card:#FFF;
+}
+body{background:var(--white);color:var(--ink);font-family:'Inter',sans-serif;min-height:100vh;}
+.app{max-width:680px;margin:0 auto;}
+
+/* ── HERO ── */
+.hero{
+  position:relative;
+  text-align:center;
+  padding:2.2rem 1.5rem 1.8rem;
+  border-bottom:1px solid var(--border);
+  overflow:hidden;
+}
+.hero-mm{
+  position:absolute;
+  inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;
+  font-size:10rem;
+  font-weight:300;
+  color:var(--rose-bg);
+  letter-spacing:-8px;
+  line-height:1;
+  user-select:none;
+  pointer-events:none;
+  opacity:0.85;
+}
+.hero-content{position:relative;z-index:1;}
+.hero-script{
+  font-family:'Great Vibes',cursive;
+  font-size:2.6rem;
+  color:var(--ink);
+  line-height:1.1;
+  margin-bottom:0.3rem;
+}
+.hero-sub{
+  font-size:10px;
+  letter-spacing:5px;
+  text-transform:uppercase;
+  color:var(--ink);
+  font-weight:400;
+}
+
+/* ── PROGRESS ── */
+.progress-wrap{
+  padding:1.2rem 1.5rem 0;
+  display:flex;
+  align-items:center;
+}
+.prog-step{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1;}
+.prog-dot{
+  width:28px;height:28px;border-radius:50%;
+  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:var(--soft);
+  transition:all 0.3s;background:#fff;
+}
+.prog-dot.active{border-color:var(--rose-dark);color:var(--rose-dark);background:var(--rose-light);}
+.prog-dot.done{border-color:var(--rose-mid);color:#fff;background:var(--rose-mid);}
+.prog-lbl{font-size:10px;letter-spacing:0.5px;color:var(--soft);text-transform:uppercase;}
+.prog-lbl.active{color:var(--rose-dark);}
+.prog-line{flex:1;height:1px;background:var(--border);margin:0 4px;margin-bottom:14px;}
+.prog-line.done{background:var(--rose-mid);}
+
+/* ── SCREEN ── */
+.screen{padding:1.4rem 1.5rem 2rem;animation:fi .25s ease;}
+@keyframes fi{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+.screen-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.75rem;font-weight:300;font-style:italic;
+  color:var(--ink);margin-bottom:0.3rem;
+}
+.screen-hint{font-size:13px;color:var(--muted);margin-bottom:1.4rem;}
+
+/* ── CAT PILLS ── */
+.cat-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.2rem;}
+.cat-pill{
+  padding:7px 16px;border-radius:20px;
+  border:1px solid var(--border);
+  background:#fff;color:var(--muted);
+  font-size:12px;cursor:pointer;
+  font-family:'Inter',sans-serif;transition:all .2s;
+}
+.cat-pill.active{background:var(--rose-bg);color:var(--ink);border-color:var(--rose-mid);}
+
+/* ── SERVICES ── */
+.svc-list{display:flex;flex-direction:column;gap:8px;}
+.svc-row{
+  background:#fff;border:1px solid var(--border);border-radius:12px;
+  padding:.95rem 1.1rem;display:flex;align-items:center;gap:13px;
+  cursor:pointer;transition:all .2s;position:relative;
+}
+.svc-row:hover{border-color:var(--rose-mid);box-shadow:0 2px 12px #f9c8d030;}
+.svc-row.selected{border-color:var(--rose-mid);background:var(--rose-light);}
+.svc-row.selected::after{
+  content:'✓';position:absolute;right:13px;
+  width:20px;height:20px;background:var(--rose-dark);color:#fff;
+  border-radius:50%;font-size:10px;font-weight:600;
+  line-height:20px;text-align:center;
+}
+.svc-em{font-size:20px;width:36px;text-align:center;flex-shrink:0;}
+.svc-name{font-size:14px;font-weight:500;color:var(--ink);margin-bottom:2px;}
+.svc-desc{font-size:12px;color:var(--muted);}
+.svc-price{display:block;font-size:15px;font-weight:500;color:var(--rose-dark);}
+.svc-dur{font-size:11px;color:var(--soft);}
+
+/* ── CALENDAR ── */
+.cal-wrap{background:#fff;border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-bottom:1.2rem;box-shadow:0 2px 16px #0000000a;}
+.cal-head{display:flex;justify-content:space-between;align-items:center;padding:.9rem 1.1rem;}
+.cal-nav{background:none;border:1px solid var(--border);color:var(--muted);width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.cal-nav:hover{border-color:var(--rose-mid);color:var(--rose-dark);}
+.cal-mth{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-style:italic;color:var(--ink);}
+.cal-dh{display:grid;grid-template-columns:repeat(7,1fr);padding:0 .9rem;}
+.cal-dl{text-align:center;font-size:9px;color:var(--soft);padding:4px 0;text-transform:uppercase;letter-spacing:.5px;}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);padding:0 .9rem .9rem;gap:2px;}
+.cal-d{text-align:center;font-size:12px;padding:8px 2px;border-radius:8px;cursor:pointer;color:var(--muted);transition:all .15s;border:1px solid transparent;}
+.cal-d:hover:not(.dis):not(.emp){background:var(--rose-light);color:var(--rose-dark);}
+.cal-d.sel{background:var(--rose-dark);color:#fff;font-weight:500;}
+.cal-d.tdy{border-color:var(--rose-mid);color:var(--rose-dark);}
+.cal-d.dis{color:var(--soft);cursor:default;opacity:.5;}
+.cal-d.emp{cursor:default;}
+
+/* ── TIMES ── */
+.times-wrap{border-top:1px solid var(--border);padding:.9rem 1.1rem 1rem;}
+.times-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:.6rem;}
+.times-g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.t-btn{border:1px solid var(--border);background:#fff;color:var(--muted);padding:10px 4px;border-radius:8px;font-size:13px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif;}
+.t-btn:hover:not(.busy){border-color:var(--rose-mid);color:var(--rose-dark);background:var(--rose-light);}
+.t-btn.sel{background:var(--rose-dark);color:#fff;border-color:var(--rose-dark);font-weight:500;}
+.t-btn.busy{color:var(--soft);cursor:default;text-decoration:line-through;opacity:.5;}
+
+/* ── FORM ── */
+.form-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:1.2rem;box-shadow:0 2px 16px #0000000a;}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;}
+.f-row.full{grid-template-columns:1fr;}
+.f-label{display:block;font-size:10px;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.f-input{width:100%;border:1px solid var(--border);border-radius:8px;padding:12px 14px;font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);background:#fafafa;outline:none;transition:border .2s;}
+.f-input:focus{border-color:var(--rose-mid);background:#fff;}
+.f-input::placeholder{color:var(--soft);}
+textarea.f-input{resize:none;}
+
+/* ── CONFIRM ── */
+.conf-svc{background:var(--rose-light);border:1px solid var(--rose-mid);border-radius:12px;padding:.9rem 1.1rem;display:flex;align-items:center;gap:12px;margin-bottom:1rem;}
+.conf-svc-name{font-size:14px;font-weight:500;color:var(--ink);}
+.conf-svc-price{font-size:12px;color:var(--rose-dark);}
+.conf-lines{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.conf-line{display:flex;justify-content:space-between;padding:11px 1.1rem;border-bottom:1px solid var(--border);font-size:13px;}
+.conf-line:last-child{border-bottom:none;}
+.c-lbl{color:var(--muted);}
+.c-val{font-weight:500;color:var(--ink);}
+.total-bar{display:flex;justify-content:space-between;align-items:baseline;padding:1rem 0 0;border-top:1px solid var(--border);margin-top:.8rem;}
+.total-lbl{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-style:italic;color:var(--ink);}
+.total-price{font-family:'Cormorant Garamond',serif;font-size:1.4rem;color:var(--rose-dark);}
+
+/* ── CTA ── */
+.cta{display:flex;gap:10px;margin-top:1.5rem;}
+.btn{flex:1;border:none;border-radius:50px;padding:14px 20px;font-family:'Inter',sans-serif;font-size:13px;font-weight:500;cursor:pointer;letter-spacing:.5px;transition:all .2s;}
+.btn-primary{background:var(--rose-dark);color:#fff;}
+.btn-primary:hover{background:#b56878;}
+.btn-primary:disabled{opacity:.3;cursor:default;}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--rose-mid);color:var(--rose-dark);}
+
+/* ── SUCCESS ── */
+.success{text-align:center;padding:2rem 0;}
+.s-mm-bg{font-family:'Cormorant Garamond',serif;font-size:6rem;font-weight:300;color:var(--rose-bg);letter-spacing:-4px;line-height:1;margin-bottom:.2rem;opacity:.9;}
+.s-script{font-family:'Great Vibes',cursive;font-size:2rem;color:var(--ink);margin-bottom:.4rem;}
+.success h2{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;font-style:italic;color:var(--ink);margin-bottom:.4rem;}
+.success p{font-size:12px;color:var(--muted);margin-bottom:1.2rem;}
+.code-badge{display:inline-block;background:var(--rose-light);color:var(--rose-dark);border:1px solid var(--rose-mid);padding:7px 22px;border-radius:20px;font-size:13px;font-weight:500;letter-spacing:3px;margin-bottom:1.4rem;}
+.success-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:1rem;text-align:left;font-size:12px;color:var(--muted);margin-bottom:1.5rem;}
+.success-card strong{display:block;font-size:13px;font-weight:500;color:var(--ink);margin-bottom:3px;}
+
+/* ── RESPONSIVE MOBILE ── */
+@media(max-width:600px){
+  .app{max-width:100%;padding:0;}
+
+  /* Hero */
+  .hero{padding:1.6rem 1rem 1.4rem;}
+  .hero-mm{font-size:6rem;}
+  .hero-script{font-size:2.2rem;}
+  .hero-sub{font-size:11px;letter-spacing:4px;}
+
+  /* Progress */
+  .progress-wrap{padding:1rem 1rem 0;}
+  .prog-dot{width:30px;height:30px;font-size:12px;}
+  .prog-lbl{font-size:10px;}
+
+  /* Screen */
+  .screen{padding:1.2rem 1rem 2rem;}
+  .screen-title{font-size:1.7rem;}
+  .screen-hint{font-size:13px;color:#666;margin-bottom:1.2rem;}
+
+  /* Category pills */
+  .cat-pill{font-size:13px;padding:8px 16px;}
+
+  /* Services */
+  .svc-name{font-size:15px;}
+  .svc-desc{font-size:12px;color:#666;}
+  .svc-price{font-size:16px;}
+  .svc-dur{font-size:11px;}
+  .svc-em{font-size:22px;}
+  .svc-row{padding:1rem 1rem;}
+
+  /* Calendar */
+  .cal-mth{font-size:1.2rem;}
+  .cal-d{font-size:14px;padding:10px 2px;border-radius:9px;}
+  .cal-dl{font-size:11px;}
+  .cal-nav{width:34px;height:34px;font-size:16px;}
+
+  /* Times */
+  .times-g{grid-template-columns:repeat(3,1fr);gap:8px;}
+  .t-btn{font-size:14px;padding:12px 4px;border-radius:10px;}
+  .times-lbl{font-size:11px;}
+
+  /* Form */
+  .f-row{grid-template-columns:1fr;}
+  .f-label{font-size:11px;letter-spacing:0.8px;margin-bottom:6px;}
+  .f-input{font-size:15px;padding:13px 14px;border-radius:10px;}
+
+  /* Confirm */
+  .conf-svc-name{font-size:16px;}
+  .conf-svc-price{font-size:13px;}
+  .conf-line{font-size:14px;padding:12px 1.1rem;}
+  .c-lbl{color:#555;}
+  .total-lbl{font-size:1.35rem;}
+  .total-price{font-size:1.5rem;}
+
+  /* Buttons */
+  .btn{font-size:14px;padding:15px 20px;border-radius:50px;}
+  .cta{margin-top:1.6rem;gap:8px;}
+
+  /* Success */
+  .s-mm-bg{font-size:5rem;}
+  .s-script{font-size:2rem;}
+  .success h2{font-size:1.7rem;}
+  .success p{font-size:14px;}
+  .code-badge{font-size:14px;letter-spacing:4px;padding:9px 26px;}
+  .success-card{font-size:13px;}
+  .success-card strong{font-size:15px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="hero">
+    <div class="hero-mm">MM</div>
+    <div class="hero-content">
+      <div class="hero-script">Mirian Marques</div>
+      <div class="hero-sub">Beauty Studio</div>
+    </div>
+  </div>
+
+  <div class="progress-wrap" id="progress"></div>
+  <div id="screen"></div>
+
+</div>
+
+<script>
+const cats=[{key:'unhas',label:'💅 Unhas'},{key:'cabelo',label:'✨ Cabelo'},{key:'sobrancelha',label:'🪄 Sobrancelha'},{key:'lash',label:'👁️ Lash'}];
+const services=[
+  {id:'manicure_gel',icon:'💅',name:'Manicure em Gel',desc:'Esmaltação em gel de longa duração',price:80,dur:'1h30',cat:'unhas'},
+  {id:'pedicure_gel',icon:'🦶',name:'Pedicure em Gel',desc:'Pedicure completa com esmalte em gel',price:90,dur:'1h30',cat:'unhas'},
+  {id:'combo_gel',icon:'💎',name:'Manicure + Pedicure em Gel',desc:'Combo completo de mãos e pés',price:160,dur:'3h',cat:'unhas'},
+  {id:'progressiva',icon:'✨',name:'Progressiva',desc:'Alisamento e selagem dos fios',price:250,dur:'3h',cat:'cabelo'},
+  {id:'botox',icon:'💆',name:'Botox Capilar',desc:'Hidratação intensa e reconstrução',price:200,dur:'2h',cat:'cabelo'},
+  {id:'selagem',icon:'🌿',name:'Selagem',desc:'Alinhamento leve e brilho intenso',price:180,dur:'2h',cat:'cabelo'},
+  {id:'tratamento',icon:'🧴',name:'Tratamento Capilar',desc:'Diagnóstico e tratamento personalizado',price:120,dur:'1h30',cat:'cabelo'},
+  {id:'design_sb',icon:'🪄',name:'Design de Sobrancelhas',desc:'Modelagem e design personalizado',price:50,dur:'40min',cat:'sobrancelha'},
+  {id:'brow_lam',icon:'🌟',name:'Brow Lamination',desc:'Fios alinhados e penteados por semanas',price:120,dur:'1h',cat:'sobrancelha'},
+  {id:'lash_lifting',icon:'👁️',name:'Lash Lifting',desc:'Curvatura permanente e efeito natural',price:130,dur:'1h30',cat:'lash'},
+];
+const months=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const dls=['D','S','T','Q','Q','S','S'];
+const times=['09:00','09:30','10:00','10:30','11:00','11:30','13:00','13:30','14:00','14:30','15:00','15:30','16:00','16:30','17:00','17:30'];
+const busy=['10:30','13:30','15:00','17:00'];
+const steps=['Serviço','Data','Dados','Confirmar'];
+
+let S={step:0,cat:'unhas',svc:null,yr:2026,mo:5,day:null,time:null,name:'',phone:'',email:'',obs:''};
+
+function getToday(){return new Date();}
+
+function render(){
+  const p=document.getElementById('progress');
+  p.innerHTML=steps.map((lbl,i)=>`
+    ${i>0?`<div class="prog-line ${i<=S.step?'done':''}"></div>`:''}
+    <div class="prog-step">
+      <div class="prog-dot ${i===S.step?'active':i<S.step?'done':''}">${i<S.step?'✓':i+1}</div>
+      <div class="prog-lbl ${i===S.step?'active':''}">${lbl}</div>
+    </div>`).join('');
+  const el=document.getElementById('screen');
+  if(S.step===0) el.innerHTML=rSvc();
+  else if(S.step===1) el.innerHTML=rCal();
+  else if(S.step===2) el.innerHTML=rForm();
+  else if(S.step===3) el.innerHTML=rConfirm();
+  else el.innerHTML=rSuccess();
+  bind();
+}
+
+function rSvc(){
+  const list=services.filter(s=>s.cat===S.cat);
+  return`<div class="screen">
+    <div class="screen-title">Qual serviço?</div>
+    <div class="screen-hint">Selecione a categoria e o procedimento desejado</div>
+    <div class="cat-row">${cats.map(c=>`<button class="cat-pill ${S.cat===c.key?'active':''}" data-cat="${c.key}">${c.label}</button>`).join('')}</div>
+    <div class="svc-list">${list.map(svc=>`
+      <div class="svc-row ${S.svc===svc.id?'selected':''}" data-id="${svc.id}">
+        <div class="svc-em">${svc.icon}</div>
+        <div class="svc-info"><div class="svc-name">${svc.name}</div><div class="svc-desc">${svc.desc}</div></div>
+        <div style="text-align:right;flex-shrink:0"><span class="svc-price">R$${svc.price}</span><br><span class="svc-dur">${svc.dur}</span></div>
+      </div>`).join('')}
+    </div>
+    <div class="cta"><button class="btn btn-primary" id="n0" ${!S.svc?'disabled':''}>Escolher data →</button></div>
+  </div>`;
+}
+
+function rCal(){
+  const now=getToday();
+  const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const fd=new Date(S.yr,S.mo,1).getDay();
+  const dim=new Date(S.yr,S.mo+1,0).getDate();
+  let cells='';
+  for(let i=0;i<fd;i++) cells+=`<div class="cal-d emp"></div>`;
+  for(let d=1;d<=dim;d++){
+    const dt=new Date(S.yr,S.mo,d);
+    const sun=dt.getDay()===0;
+    const past=dt<today;
+    const isT=dt.getTime()===today.getTime();
+    const sel=S.day===d;
+    let cls='cal-d';
+    if(sun||past) cls+=' dis';
+    if(isT&&!sel) cls+=' tdy';
+    if(sel) cls+=' sel';
+    cells+=`<div class="${cls}" data-day="${d}">${d}</div>`;
+  }
+  const th=S.day?`<div class="times-wrap">
+    <div class="times-lbl">Horários — ${S.day} de ${months[S.mo]}</div>
+    <div class="times-g">${times.map(t=>`<button class="t-btn ${busy.includes(t)?'busy':''} ${S.time===t?'sel':''}" data-time="${t}">${t}</button>`).join('')}</div>
+  </div>`:`<div style="text-align:center;padding:.8rem 0 1rem;font-size:12px;color:var(--soft)">Selecione uma data ↑</div>`;
+  return`<div class="screen">
+    <div class="screen-title">Quando?</div>
+    <div class="screen-hint">Escolha o melhor dia e horário</div>
+    <div class="cal-wrap">
+      <div class="cal-head">
+        <button class="cal-nav" id="cp">‹</button>
+        <span class="cal-mth">${months[S.mo]} ${S.yr}</span>
+        <button class="cal-nav" id="cn">›</button>
+      </div>
+      <div class="cal-dh">${dls.map(d=>`<div class="cal-dl">${d}</div>`).join('')}</div>
+      <div class="cal-g">${cells}</div>
+      ${th}
+    </div>
+    <div class="cta">
+      <button class="btn btn-ghost" id="b1">← Voltar</button>
+      <button class="btn btn-primary" id="n1" ${!S.day||!S.time?'disabled':''}>Meus dados →</button>
+    </div>
+  </div>`;
+}
+
+function rForm(){
+  return`<div class="screen">
+    <div class="screen-title">Seus dados</div>
+    <div class="screen-hint">Para confirmarmos seu agendamento</div>
+    <div class="form-card">
+      <div class="f-row">
+        <div><label class="f-label">Nome</label><input class="f-input" id="fn" placeholder="Seu nome completo" value="${S.name}"></div>
+        <div><label class="f-label">WhatsApp</label><input class="f-input" id="fp" type="tel" placeholder="(41) 99999-0000" value="${S.phone}"></div>
+      </div>
+      <div class="f-row full">
+        <div><label class="f-label">E-mail</label><input class="f-input" id="fe" type="email" placeholder="seuemail@exemplo.com" value="${S.email}"></div>
+      </div>
+      <div class="f-row full" style="margin-bottom:0">
+        <div><label class="f-label">Observações (opcional)</label><textarea class="f-input" id="fo" rows="3" placeholder="Alergia, referência, preferência de cor...">${S.obs}</textarea></div>
+      </div>
+    </div>
+    <div class="cta">
+      <button class="btn btn-ghost" id="b2">← Voltar</button>
+      <button class="btn btn-primary" id="n2">Revisar →</button>
+    </div>
+  </div>`;
+}
+
+function rConfirm(){
+  const svc=services.find(s=>s.id===S.svc);
+  return`<div class="screen">
+    <div class="screen-title">Tudo certo?</div>
+    <div class="screen-hint">Revise os detalhes antes de confirmar</div>
+    <div class="conf-svc">
+      <div style="font-size:22px">${svc.icon}</div>
+      <div><div class="conf-svc-name">${svc.name}</div><div class="conf-svc-price">R$${svc.price} · ${svc.dur}</div></div>
+    </div>
+    <div class="conf-lines">
+      <div class="conf-line"><span class="c-lbl">Data</span><span class="c-val">${S.day} de ${months[S.mo]} de ${S.yr}</span></div>
+      <div class="conf-line"><span class="c-lbl">Horário</span><span class="c-val">${S.time}</span></div>
+      <div class="conf-line"><span class="c-lbl">Nome</span><span class="c-val">${S.name||'—'}</span></div>
+      <div class="conf-line"><span class="c-lbl">WhatsApp</span><span class="c-val">${S.phone||'—'}</span></div>
+      ${S.obs?`<div class="conf-line"><span class="c-lbl">Obs.</span><span class="c-val">${S.obs}</span></div>`:''}
+    </div>
+    <div class="total-bar">
+      <span class="total-lbl">Total</span>
+      <span class="total-price">R$${svc.price}</span>
+    </div>
+    <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:1rem">Você receberá um lembrete via WhatsApp 24h antes ✨</p>
+    <div class="cta">
+      <button class="btn btn-ghost" id="b3">← Editar</button>
+      <button class="btn btn-primary" id="bc">Confirmar agendamento</button>
+    </div>
+  </div>`;
+}
+
+function rSuccess(){
+  const svc=services.find(s=>s.id===S.svc);
+  const code=S.code||'MM'+Math.floor(1000+Math.random()*9000);
+  return`<div class="screen">
+    <div class="success">
+      <div class="s-mm-bg">MM</div>
+      <div class="s-script">Mirian Marques</div>
+      <h2>Confirmado com sucesso!</h2>
+      <p>Obrigada pela preferência, ${S.name||'cliente'}!<br>Até breve no studio ✨</p>
+      <div class="code-badge">${code}</div>
+      <div class="success-card">
+        <strong>${svc.name}</strong>
+        ${S.day} de ${months[S.mo]} de ${S.yr} · ${S.time}
+        <div style="margin-top:5px;font-size:11px;color:var(--soft)">Lembrete enviado para ${S.phone||'seu WhatsApp'}</div>
+      </div>
+      <button class="btn btn-primary" style="max-width:240px;margin:0 auto;display:block" id="rst">Novo agendamento</button>
+    </div>
+  </div>`;
+}
+
+function bind(){
+  document.querySelectorAll('[data-cat]').forEach(el=>el.addEventListener('click',()=>{S.cat=el.dataset.cat;S.svc=null;render();}));
+  document.querySelectorAll('[data-id]').forEach(el=>el.addEventListener('click',()=>{S.svc=el.dataset.id;render();}));
+  const g=(id,fn)=>{const el=document.getElementById(id);if(el)el.addEventListener('click',fn);};
+  g('n0',()=>{S.step=1;render();});
+  g('cp',()=>{S.mo--;if(S.mo<0){S.mo=11;S.yr--;}render();});
+  g('cn',()=>{S.mo++;if(S.mo>11){S.mo=0;S.yr++;}render();});
+  document.querySelectorAll('[data-day]').forEach(el=>el.addEventListener('click',()=>{
+    if(el.classList.contains('dis')||el.classList.contains('emp'))return;
+    S.day=parseInt(el.dataset.day);S.time=null;render();
+  }));
+  document.querySelectorAll('[data-time]').forEach(el=>el.addEventListener('click',()=>{
+    if(el.classList.contains('busy'))return;S.time=el.dataset.time;render();
+  }));
+  g('b1',()=>{S.step=0;render();});
+  g('n1',()=>{S.step=2;render();});
+  g('b2',()=>{S.step=1;render();});
+  g('n2',()=>{
+    S.name=document.getElementById('fn').value;
+    S.phone=document.getElementById('fp').value;
+    S.email=document.getElementById('fe').value;
+    S.obs=document.getElementById('fo').value;
+    S.step=3;render();
+  });
+  g('b3',()=>{S.step=2;render();});
+  g('bc',async()=>{
+    const code='MM'+Math.floor(1000+Math.random()*9000);
+    S.code=code;
+    try{
+      const {db}=window.__fb;
+      const {collection,addDoc}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+      await addDoc(collection(db,'agendamentos'),{
+        code,
+        name:S.name,phone:S.phone,email:S.email,
+        svc:S.svc,day:S.day,mo:S.mo,yr:S.yr,time:S.time,obs:S.obs||'',
+        status:'pendente',
+        createdAt:new Date().toISOString()
+      });
+    }catch(e){console.error('Firebase erro:',e);}
+    S.step=4;render();
+  });
+  g('rst',()=>{S={step:0,cat:'unhas',svc:null,yr:new Date().getFullYear(),mo:new Date().getMonth(),day:null,time:null,name:'',phone:'',email:'',obs:''};render();});
+}
+
+// Init with current month
+S.yr=new Date().getFullYear();
+S.mo=new Date().getMonth();
+
+// ── FIREBASE ──────────────────────────────────────────────────
+(async()=>{
+  try{
+    const {initializeApp}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js');
+    const {getFirestore}=await import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js');
+    const app=initializeApp({
+      apiKey:"AIzaSyAieuKRpKUbez78uhPlJvE6xx4R4t8Nev0",
+      authDomain:"mirian-marques-44086.firebaseapp.com",
+      projectId:"mirian-marques-44086",
+      storageBucket:"mirian-marques-44086.firebasestorage.app",
+      messagingSenderId:"581068000883",
+      appId:"1:581068000883:web:9e964dc1d3b20face3e406"
+    });
+    window.__fb={db:getFirestore(app)};
+  }catch(e){console.error('Firebase init erro:',e);}
+})();
+
+render();
+</script>
+</body>
+</html>
